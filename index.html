@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordem Paranormal RPG — Guia do Agente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Cabeçalho / Menu de Navegação -->
+    <header>
+        <div class="logo">🔺 ORDEM PARANORMAL</div>
+        <nav>
+            <ul>
+                <li><a href="#sobre">O Universo</a></li>
+                <li><a href="#elementos">Os Elementos</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <li><a href="#dados">Simulador</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Banner Principal -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>O Outro Lado está faminto.</h1>
+            <p>Prepare seu inventário, transcenda seus medos e proteja a Realidade.</p>
+            <a href="#dados" class="btn">Rolar Dados</a>
+        </div>
+    </section>
+
+    <!-- Seção Sobre o RPG -->
+    <section id="sobre" class="container">
+        <h2>O Sistema de RPG</h2>
+        <p>Criado por Rafael "Cellbit" Lange, <strong>Ordem Paranormal RPG</strong> é um sistema de investigação e horror baseado no sistema de regras <em>Tormenta20</em>. Os jogadores interpretam Agentes da Ordem (Ordo Realitas), uma organização secreta que combate as manifestações do Medo vindas do Outro Lado.</p>
+    </section>
+
+    <!-- Seção Elementos do Outro Lado -->
+    <section id="elementos" class="bg-dark">
+        <div class="container">
+            <h2>Os Elementos Primalistas</h2>
+            <div class="grid">
+                <div class="card elemento-sangue">
+                    <h3>Sangue</h3>
+                    <p>A entidade da paixão, dor, obsessão e transformação física. Busca o sentimento extremo.</p>
+                </div>
+                <div class="card elemento-morte">
+                    <h3>Morte</h3>
+                    <p>A entidade do tempo, lodo, decadência e distorção temporal. Quer consumir tudo o que vive.</p>
+                </div>
+                <div class="card elemento-conhecimento">
+                    <h3>Conhecimento</h3>
+                    <p>A entidade dos símbolos, lógica, verdade e percepção. Busca catalogar a realidade.</p>
+                </div>
+                <div class="card elemento-energia">
+                    <h3>Energia</h3>
+                    <p>A entidade do caos, mudança, eletricidade e sorte. Altera a lógica física aleatoriamente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Classes -->
+    <section id="classes" class="container">
+        <h2>Classes de Agentes</h2>
+        <div class="grid">
+            <div class="class-box">
+                <h3>Combatente</h3>
+                <p>Especialistas em combate corpo a corpo ou armas de fogo. Protegem a equipe e causam dano massivo.</p>
+            </div>
+            <div class="class-box">
+                <h3>Especialista</h3>
+                <p>Mestres em perícias, investigação, tecnologia e suporte. Essenciais para desvendar os mistérios.</p>
+            </div>
+            <div class="class-box">
+                <h3>Ocultista</h3>
+                <p>Aqueles que transcendem para conjurar rituais do Outro Lado, sacrificando sua própria Sanidade.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Interativa (JavaScript): Rolador de Dados -->
+    <section id="dados" class="bg-dark text-center">
+        <div class="container dashboard">
+            <h2>Simulador de Atributo (Dados d20)</h2>
+            <p>Escolha o valor do seu Atributo (quantos dados vai rolar) e pegue o maior resultado.</p>
+            
+            <div class="dados-controles">
+                <input type="number" id="qtdDados" min="1" max="5" value="1">
+                <button onclick="rolarDadosParanormais()">Rolar Dados</button>
+            </div>
+
+            <div id="resultadoDado" class="resultado-box">
+                Aguardando rolagem...
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2026 Ordem Paranormal Fan Site. Inspirado na obra de Cellbit e Jambô Editora.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
