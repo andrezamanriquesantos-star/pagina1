@@ -3,105 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem Paranormal RPG — Guia do Agente</title>
+    <title>Ordem Paranormal — Central do Agente</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Cabeçalho / Menu de Navegação -->
     <header>
-        <div class="logo">🔺 ORDEM PARANORMAL</div>
+        <div class="logo">🔺 ORDO REALITAS</div>
         <nav>
             <ul>
-                <li><a href="#sobre">O Universo</a></li>
-                <li><a href="#elementos">Os Elementos</a></li>
-                <li><a href="#classes">Classes</a></li>
-                <li><a href="#dados">Simulador</a></li>
+                <li><a href="#sobre">Universo</a></li>
+                <li><a href="#criaturas">Criaturas</a></li>
+                <li><a href="#missoes">Missões</a></li>
+                <li><a href="#fichas">Fichas</a></li>
+                <li><a href="#dados">Dados</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Banner Principal -->
     <section class="hero">
         <div class="hero-content">
             <h1>O Outro Lado está faminto.</h1>
-            <p>Prepare seu inventário, transcenda seus medos e proteja a Realidade.</p>
-            <a href="#dados" class="btn">Rolar Dados</a>
+            <p>Monitore criaturas, gerencie sua equipe e investigue o Medo.</p>
+            <a href="#missoes" class="btn">Iniciar Investigação</a>
         </div>
     </section>
 
-    <!-- Seção Sobre o RPG -->
+    <!-- Universo -->
     <section id="sobre" class="container">
         <h2>O Sistema de RPG</h2>
-        <p>Criado por Rafael "Cellbit" Lange, <strong>Ordem Paranormal RPG</strong> é um sistema de investigação e horror baseado no sistema de regras <em>Tormenta20</em>. Os jogadores interpretam Agentes da Ordem (Ordo Realitas), uma organização secreta que combate as manifestações do Medo vindas do Outro Lado.</p>
+        <p>Criado por Cellbit, <strong>Ordem Paranormal</strong> desafia agentes secretos a investigarem mistérios sobrenaturais onde a própria realidade corre risco de colapso devido ao Medo.</p>
     </section>
 
-    <!-- Seção Elementos do Outro Lado -->
-    <section id="elementos" class="bg-dark">
+    <!-- 1. SEÇÃO DE CRIATURAS (NOVA) -->
+    <section id="criaturas" class="bg-dark">
         <div class="container">
-            <h2>Os Elementos Primalistas</h2>
+            <h2>Bestiário Paranormal</h2>
+            <p style="margin-bottom: 25px;">Clique em uma criatura para analisar suas fraquezas conhecidas pela Ordem:</p>
             <div class="grid">
-                <div class="card elemento-sangue">
-                    <h3>Sangue</h3>
-                    <p>A entidade da paixão, dor, obsessão e transformação física. Busca o sentimento extremo.</p>
+                <div class="card card-criatura" onclick="detalharCriatura('Degolificada')">
+                    <h3 style="color: #990000;">Degolificada</h3>
+                    <p>Elemento: Sangue</p>
+                    <small>Clique para ver detalhes</small>
                 </div>
-                <div class="card elemento-morte">
-                    <h3>Morte</h3>
-                    <p>A entidade do tempo, lodo, decadência e distorção temporal. Quer consumir tudo o que vive.</p>
+                <div class="card card-criatura" onclick="detalharCriatura('Aniquilador')">
+                    <h3 style="color: #0088cc;">O Aniquilador</h3>
+                    <p>Elemento: Energia</p>
+                    <small>Clique para ver detalhes</small>
                 </div>
-                <div class="card elemento-conhecimento">
-                    <h3>Conhecimento</h3>
-                    <p>A entidade dos símbolos, lógica, verdade e percepção. Busca catalogar a realidade.</p>
-                </div>
-                <div class="card elemento-energia">
-                    <h3>Energia</h3>
-                    <p>A entidade do caos, mudança, eletricidade e sorte. Altera a lógica física aleatoriamente.</p>
+                <div class="card card-criatura" onclick="detalharCriatura('Carente')">
+                    <h3 style="color: #4a0e4e;">O Carente</h3>
+                    <p>Elemento: Morte</p>
+                    <small>Clique para ver detalhes</small>
                 </div>
             </div>
+            <div id="painelCriatura" class="resultado-box" style="margin-top: 25px; display: none;"></div>
         </div>
     </section>
 
-    <!-- Seção de Classes -->
-    <section id="classes" class="container">
-        <h2>Classes de Agentes</h2>
-        <div class="grid">
-            <div class="class-box">
-                <h3>Combatente</h3>
-                <p>Especialistas em combate corpo a corpo ou armas de fogo. Protegem a equipe e causam dano massivo.</p>
-            </div>
-            <div class="class-box">
-                <h3>Especialista</h3>
-                <p>Mestres em perícias, investigação, tecnologia e suporte. Essenciais para desvendar os mistérios.</p>
-            </div>
-            <div class="class-box">
-                <h3>Ocultista</h3>
-                <p>Aqueles que transcendem para conjurar rituais do Outro Lado, sacrificando sua própria Sanidade.</p>
-            </div>
-        </div>
+    <!-- 2. SEÇÃO GERADOR DE MISSÕES (NOVA) -->
+    <section id="missoes" class="container text-center">
+        <h2>Gerador de Casos Paranormais</h2>
+        <p>Gere briefing de missões aleatórias instantaneamente para suas sessões.</p>
+        <button class="btn" onclick="gerarMissao()" style="margin: 20px 0;">Gerar Nova Missão</button>
+        <div id="quadroMissao" class="resultado-box text-left" style="max-width: 700px; margin: 0 auto; display: none;"></div>
     </section>
 
-    <!-- Seção Interativa (JavaScript): Rolador de Dados -->
-    <section id="dados" class="bg-dark text-center">
-        <div class="container dashboard">
-            <h2>Simulador de Atributo (Dados d20)</h2>
-            <p>Escolha o valor do seu Atributo (quantos dados vai rolar) e pegue o maior resultado.</p>
+    <!-- 3. SEÇÃO GERENCIADOR DE FICHAS (NOVA) -->
+    <section id="fichas" class="bg-dark">
+        <div class="container">
+            <h2>Registro de Agentes da Ordem</h2>
+            <p>Crie fichas de personagens rápidos e salve na memória do navegador.</p>
             
-            <div class="dados-controles">
-                <input type="number" id="qtdDados" min="1" max="5" value="1">
-                <button onclick="rolarDadosParanormais()">Rolar Dados</button>
-            </div>
-
-            <div id="resultadoDado" class="resultado-box">
-                Aguardando rolagem...
+            <div class="grid" style="grid-template-columns: 1fr 2fr; margin-top: 30px;">
+                <!-- Formulário -->
+                <div class="form-ficha">
+                    <h3>Novo Agente</h3>
+                    <input type="text" id="nomeAgente" placeholder="Nome do Agente" required><br>
+                    <select id="classeAgente">
+                        <option value="Combatente">Combatente</option>
+                        <option value="Especialista">Especialista</option>
+                        <option value="Ocultista">Ocultista</option>
+                    </select><br>
+                    <input type="number" id="nexAgente" placeholder="NEX (%)" min="5" max="99" value="5"><br>
+                    <button class="btn" onclick="salvarAgente()" style="width: 100%;">Registrar Agente</button>
+                </div>
+                
+                <!-- Lista de Fichas Salvas -->
+                <div>
+                    <h3>Agentes Ativos</h3>
+                    <div id="listaAgentes" class="grid" style="grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <!-- Inserido via JS -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Rodapé -->
+    <!-- Simulador de Dados -->
+    <section id="dados" class="text-center container">
+        <h2>Simulador de Atributo (Dados d20)</h2>
+        <div class="dados-controles">
+            <input type="number" id="qtdDados" min="1" max="5" value="1">
+            <button onclick="rolarDadosParanormais()" class="btn">Rolar Dados</button>
+        </div>
+        <div id="resultadoDado" class="resultado-box">Aguardando rolagem...</div>
+    </section>
+
     <footer>
-        <p>&copy; 2026 Ordem Paranormal Fan Site. Inspirado na obra de Cellbit e Jambô Editora.</p>
+        <p>&copy; 2026 Ordem Paranormal Central. Baseado na obra de Cellbit e Jambô Editora.</p>
     </footer>
 
     <script src="script.js"></script>
 </body>
 </html>
+
