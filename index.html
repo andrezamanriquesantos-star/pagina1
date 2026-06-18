@@ -10,68 +10,86 @@
 
     <header>
         <h1>ORDEM PARANORMAL</h1>
-        <p>O Medo é a Chave.</p>
+        <p>A Membrana está se rompendo.</p>
     </header>
 
     <main class="container">
+
         <section class="card">
-            <h2>Rolagem de Dados</h2>
-            <div class="botoes-dados">
-                <button onclick="rolarDado('1d4')">Rolar 1d4</button>
-                <button onclick="rolarDado('1d6')">Rolar 1d6</button>
-                <button onclick="rolarDado('1d12')">Rolar 1d12</button>
-                <button onclick="rolarDado('1d20')">Rolar 1d20</button>
-            </div>
-            <div class="input-personalizado">
-                <input type="text" id="dadoCustom" placeholder="Ex: 3d6, 2d20">
-                <button onclick="rolarDado(document.getElementById('dadoCustom').value)">Rolar</button>
-            </div>
-            <div id="resultadoDado" class="resultado"></div>
+            <h2>O Universo</h2>
+            <p><strong>Ordem Paranormal</strong> é um universo de investigação e terror onde o mundo real é constantemente ameaçado pelo <strong>Outro Lado</strong>. Uma dimensão paranormal impulsionada pelo medo humano. Os agentes da <em>Ordem Veritatis</em> utilizam perícias e rituais para conter as criaturas que tentam atravessar a membrana da realidade.</p>
         </section>
 
         <section class="card">
-            <h2>Temporadas & Spin-offs</h2>
-            <button onclick="carregarTemporadas()" class="btn-carregar">Carregar Linha do Tempo</button>
-            <div id="listaTemporadas" class="lista-temporadas">
-                </div>
+            <h2>Teste de Atributo (Sistema d20)</h2>
+            <p class="subtitulo">No sistema da Ordem, você rola dados de 20 lados equivalentes ao seu atributo e escolhe apenas o maior valor.</p>
+            
+            <div class="painel-dados">
+                <label for="qtdDados">Quantidade de d20:</label>
+                <input type="number" id="qtdDados" value="1" min="1" max="10">
+                <button onclick="enviarRolagem()">Rolar Atributo</button>
+            </div>
+
+            <div id="resultadoCaixa" class="resultado">
+                <span class="placeholder">Aguardando comando do servidor Java...</span>
+            </div>
         </section>
+
+        <section class="card">
+            <h2>Os Elementos do Medo</h2>
+            <div class="elementos-grid">
+                <div class="elemento sangue">
+                    <h3>Sangue</h3>
+                    <p>Sentimento, dor, obsessão e paixão. O Sangue distorce a carne e foca na brutalidade física extrema.</p>
+                </div>
+                <div class="elemento morte">
+                    <h3>Morte</h3>
+                    <p>Tempo, entropia e lodo. A Morte consome o tempo das coisas e distorce a percepção do ciclo vital.</p>
+                </div>
+                <div class="elemento conhecimento">
+                    <h3>Conhecimento</h3>
+                    <p>Razão, lógica e geometria. Buscar entender o paranormal cede poder à mente, mas cobra o preço da sanidade.</p>
+                </div>
+                <div class="elemento energia">
+                    <h3>Energia</h3>
+                    <p>Caos, eletricidade e mudança. A Energia representa a total imprevisibilidade e a quebra das leis da física.</p>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <script>
+        // Altere para a URL onde sua API Java/Spring Boot está rodando
         const API_URL = "http://localhost:8080/api";
 
-        async function rolarDado(dado) {
-            if(!dado) return;
+        async function enviarRolagem() {
+            const qtd = document.getElementById('qtdDados').value;
+            const caixa = document.getElementById('resultadoCaixa');
+
             try {
-                const response = await fetch(`${API_URL}/rolar?dado=${dado}`);
-                const data = await response.json();
-                const divResultado = document.getElementById('resultadoDado');
-                
-                if(data.sucesso) {
-                    divResultado.innerHTML = `<strong>Resultado para ${dado}:</strong> ${data.total} <br> <span class="detalhe">Dados: [${data.rolagens.join(', ')}]</span>`;
-                } else {
-                    divResultado.innerHTML = `<span class="erro">${data.erro}</span>`;
+                const resposta = await fetch(`${API_URL}/rolar-d20?quantidade=${qtd}`);
+                const dados = await response.json();
+
+                if(dados.sucesso) {
+                    let html = `<div>Dados: <strong>[ ${dados.rolagens.join(', ')} ]</strong></div>`;
+                    html += `<div class="destaque">Maior Valor: <span>${dados.maiorValor}</span></div>`;
+                    
+                    if(dados.maiorValor === 20) html += `<div class="critico">CRÍTICO!</div>`;
+                    
+                    caixa.innerHTML = html;
                 }
-            } catch (err) {
-                divResultado.innerHTML = `<span class="erro">Erro ao conectar com o servidor Java.</span>`;
-            }
-        }
-
-        async function carregarTemporadas() {
-            try {
-                const response = await fetch(`${API_URL}/temporadas`);
-                const data = await response.json();
-                const lista = document.getElementById('listaTemporadas');
-                lista.innerHTML = "";
-
-                data.forEach(temp => {
-                    const item = document.createElement('div');
-                    item.className = 'item-temporada';
-                    item.innerHTML = `<h3>${temp.titulo}</h3><p>${temp.descricao}</p>`;
-                    lista.appendChild(item);
-                });
-            } catch (err) {
-                alert("Erro ao carregar as temporadas do servidor.");
+            } catch (erro) {
+                // Caso o servidor Java não esteja aberto, simula localmente para não quebrar a tela
+                const locais = [];
+                for(let i=0; i<qtd; i++) locais.push(Math.floor(Math.random()*20)+1);
+                const maior = Math.max(...locais);
+                
+                caixa.innerHTML = `
+                    <div style="color: #ffa500; font-size: 0.8rem; margin-bottom: 5px;">(Servidor Java Offline - Modo de Emergência Local Ativo)</div>
+                    <div>Dados: [ ${locais.join(', ')} ]</div>
+                    <div class="destaque">Maior Valor: <span style="color:#ff3333">${maior}</span></div>
+                `;
             }
         }
     </script>
