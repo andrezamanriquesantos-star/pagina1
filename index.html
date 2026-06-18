@@ -3,118 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem Paranormal — Central do Agente</title>
+    <title>Ordem Paranormal - Painel do Investigador</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <div class="logo">🔺 ORDO REALITAS</div>
-        <nav>
-            <ul>
-                <li><a href="#sobre">Universo</a></li>
-                <li><a href="#criaturas">Criaturas</a></li>
-                <li><a href="#missoes">Missões</a></li>
-                <li><a href="#fichas">Fichas</a></li>
-                <li><a href="#dados">Dados</a></li>
-            </ul>
-        </nav>
+        <h1>ORDEM PARANORMAL</h1>
+        <p>O Medo é a Chave.</p>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>O Outro Lado está faminto.</h1>
-            <p>Monitore criaturas, gerencie sua equipe e investigue o Medo.</p>
-            <a href="#missoes" class="btn">Iniciar Investigação</a>
-        </div>
-    </section>
-
-    <!-- Universo -->
-    <section id="sobre" class="container">
-        <h2>O Sistema de RPG</h2>
-        <p>Criado por Cellbit, <strong>Ordem Paranormal</strong> desafia agentes secretos a investigarem mistérios sobrenaturais onde a própria realidade corre risco de colapso devido ao Medo.</p>
-    </section>
-
-    <!-- 1. SEÇÃO DE CRIATURAS (NOVA) -->
-    <section id="criaturas" class="bg-dark">
-        <div class="container">
-            <h2>Bestiário Paranormal</h2>
-            <p style="margin-bottom: 25px;">Clique em uma criatura para analisar suas fraquezas conhecidas pela Ordem:</p>
-            <div class="grid">
-                <div class="card card-criatura" onclick="detalharCriatura('Degolificada')">
-                    <h3 style="color: #990000;">Degolificada</h3>
-                    <p>Elemento: Sangue</p>
-                    <small>Clique para ver detalhes</small>
-                </div>
-                <div class="card card-criatura" onclick="detalharCriatura('Aniquilador')">
-                    <h3 style="color: #0088cc;">O Aniquilador</h3>
-                    <p>Elemento: Energia</p>
-                    <small>Clique para ver detalhes</small>
-                </div>
-                <div class="card card-criatura" onclick="detalharCriatura('Carente')">
-                    <h3 style="color: #4a0e4e;">O Carente</h3>
-                    <p>Elemento: Morte</p>
-                    <small>Clique para ver detalhes</small>
-                </div>
+    <main class="container">
+        <section class="card">
+            <h2>Rolagem de Dados</h2>
+            <div class="botoes-dados">
+                <button onclick="rolarDado('1d4')">Rolar 1d4</button>
+                <button onclick="rolarDado('1d6')">Rolar 1d6</button>
+                <button onclick="rolarDado('1d12')">Rolar 1d12</button>
+                <button onclick="rolarDado('1d20')">Rolar 1d20</button>
             </div>
-            <div id="painelCriatura" class="resultado-box" style="margin-top: 25px; display: none;"></div>
-        </div>
-    </section>
+            <div class="input-personalizado">
+                <input type="text" id="dadoCustom" placeholder="Ex: 3d6, 2d20">
+                <button onclick="rolarDado(document.getElementById('dadoCustom').value)">Rolar</button>
+            </div>
+            <div id="resultadoDado" class="resultado"></div>
+        </section>
 
-    <!-- 2. SEÇÃO GERADOR DE MISSÕES (NOVA) -->
-    <section id="missoes" class="container text-center">
-        <h2>Gerador de Casos Paranormais</h2>
-        <p>Gere briefing de missões aleatórias instantaneamente para suas sessões.</p>
-        <button class="btn" onclick="gerarMissao()" style="margin: 20px 0;">Gerar Nova Missão</button>
-        <div id="quadroMissao" class="resultado-box text-left" style="max-width: 700px; margin: 0 auto; display: none;"></div>
-    </section>
-
-    <!-- 3. SEÇÃO GERENCIADOR DE FICHAS (NOVA) -->
-    <section id="fichas" class="bg-dark">
-        <div class="container">
-            <h2>Registro de Agentes da Ordem</h2>
-            <p>Crie fichas de personagens rápidos e salve na memória do navegador.</p>
-            
-            <div class="grid" style="grid-template-columns: 1fr 2fr; margin-top: 30px;">
-                <!-- Formulário -->
-                <div class="form-ficha">
-                    <h3>Novo Agente</h3>
-                    <input type="text" id="nomeAgente" placeholder="Nome do Agente" required><br>
-                    <select id="classeAgente">
-                        <option value="Combatente">Combatente</option>
-                        <option value="Especialista">Especialista</option>
-                        <option value="Ocultista">Ocultista</option>
-                    </select><br>
-                    <input type="number" id="nexAgente" placeholder="NEX (%)" min="5" max="99" value="5"><br>
-                    <button class="btn" onclick="salvarAgente()" style="width: 100%;">Registrar Agente</button>
+        <section class="card">
+            <h2>Temporadas & Spin-offs</h2>
+            <button onclick="carregarTemporadas()" class="btn-carregar">Carregar Linha do Tempo</button>
+            <div id="listaTemporadas" class="lista-temporadas">
                 </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:8080/api";
+
+        async function rolarDado(dado) {
+            if(!dado) return;
+            try {
+                const response = await fetch(`${API_URL}/rolar?dado=${dado}`);
+                const data = await response.json();
+                const divResultado = document.getElementById('resultadoDado');
                 
-                <!-- Lista de Fichas Salvas -->
-                <div>
-                    <h3>Agentes Ativos</h3>
-                    <div id="listaAgentes" class="grid" style="grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-                        <!-- Inserido via JS -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                if(data.sucesso) {
+                    divResultado.innerHTML = `<strong>Resultado para ${dado}:</strong> ${data.total} <br> <span class="detalhe">Dados: [${data.rolagens.join(', ')}]</span>`;
+                } else {
+                    divResultado.innerHTML = `<span class="erro">${data.erro}</span>`;
+                }
+            } catch (err) {
+                divResultado.innerHTML = `<span class="erro">Erro ao conectar com o servidor Java.</span>`;
+            }
+        }
 
-    <!-- Simulador de Dados -->
-    <section id="dados" class="text-center container">
-        <h2>Simulador de Atributo (Dados d20)</h2>
-        <div class="dados-controles">
-            <input type="number" id="qtdDados" min="1" max="5" value="1">
-            <button onclick="rolarDadosParanormais()" class="btn">Rolar Dados</button>
-        </div>
-        <div id="resultadoDado" class="resultado-box">Aguardando rolagem...</div>
-    </section>
+        async function carregarTemporadas() {
+            try {
+                const response = await fetch(`${API_URL}/temporadas`);
+                const data = await response.json();
+                const lista = document.getElementById('listaTemporadas');
+                lista.innerHTML = "";
 
-    <footer>
-        <p>&copy; 2026 Ordem Paranormal Central. Baseado na obra de Cellbit e Jambô Editora.</p>
-    </footer>
-
-    <script src="script.js"></script>
+                data.forEach(temp => {
+                    const item = document.createElement('div');
+                    item.className = 'item-temporada';
+                    item.innerHTML = `<h3>${temp.titulo}</h3><p>${temp.descricao}</p>`;
+                    lista.appendChild(item);
+                });
+            } catch (err) {
+                alert("Erro ao carregar as temporadas do servidor.");
+            }
+        }
+    </script>
 </body>
 </html>
-
