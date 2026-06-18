@@ -3,64 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ordem Paranormal - Painel do Investigador</title>
+    <title>Ordem Paranormal - Painel Avançado</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
         <h1>ORDEM PARANORMAL</h1>
-        <p>A Membrana está se rompendo.</p>
+        <p>A membrana está fraca. O Medo molda a realidade.</p>
     </header>
 
     <main class="container">
 
-        <section class="card">
-            <h2>O Universo</h2>
-            <p><strong>Ordem Paranormal</strong> é um universo de investigação e terror onde o mundo real é constantemente ameaçado pelo <strong>Outro Lado</strong>. Uma dimensão paranormal impulsionada pelo medo humano. Os agentes da <em>Ordem Veritatis</em> utilizam perícias e rituais para conter as criaturas que tentam atravessar a membrana da realidade.</p>
+        <section class="card card-medo">
+            <h2>O Universo & O Medo</h2>
+            <p><strong>Ordem Paranormal</strong> aborda a constante batalha entre o mundo real e o <strong>Outro Lado</strong>. A força motriz por trás de todas as anomalias é o <strong>Medo</strong>. Quanto mais as pessoas temem o desconhecido, mais fina fica a membrana que separa as realidades, permitindo que rituais e monstros cruzem para o nosso lado.</p>
         </section>
 
         <section class="card">
-            <h2>Teste de Atributo (Sistema d20)</h2>
-            <p class="subtitulo">No sistema da Ordem, você rola dados de 20 lados equivalentes ao seu atributo e escolhe apenas o maior valor.</p>
+            <h2>Os Elementos do Outro Lado</h2>
+            <p style="color: #888; margin-bottom: 1.5rem;">O Paranormal se manifesta através de quatro grandes vertentes de energia:</p>
             
-            <div class="painel-dados">
-                <label for="qtdDados">Quantidade de d20:</label>
-                <input type="number" id="qtdDados" value="1" min="1" max="10">
-                <button onclick="enviarRolagem()">Rolar Atributo</button>
-            </div>
-
-            <div id="resultadoCaixa" class="resultado">
-                <span class="placeholder">Aguardando comando do servidor Java...</span>
-            </div>
-        </section>
-
-        <section class="card">
-            <h2>Os Elementos do Medo</h2>
             <div class="elementos-grid">
                 <div class="elemento sangue">
                     <h3>Sangue</h3>
-                    <p>Sentimento, dor, obsessão e paixão. O Sangue distorce a carne e foca na brutalidade física extrema.</p>
+                    <p>O elemento do sentimento, da dor, da obsessão e da paixão. Ele distorce a biologia, focando na força física bruta e na brutalidade carnal.</p>
                 </div>
+                
                 <div class="elemento morte">
                     <h3>Morte</h3>
-                    <p>Tempo, entropia e lodo. A Morte consome o tempo das coisas e distorce a percepção do ciclo vital.</p>
+                    <p>O elemento do tempo, da entropia e do lodo. A Morte busca consumir o tempo das coisas e distorcer a percepção do ciclo da vida.</p>
                 </div>
+                
                 <div class="elemento conhecimento">
                     <h3>Conhecimento</h3>
-                    <p>Razão, lógica e geometria. Buscar entender o paranormal cede poder à mente, mas cobra o preço da sanidade.</p>
+                    <p>O elemento da razão, da lógica, da geometria e dos símbolos. Estudar o paranormal confere poder e percepção, mas cobra o preço da sanidade.</p>
                 </div>
+                
                 <div class="elemento energia">
                     <h3>Energia</h3>
-                    <p>Caos, eletricidade e mudança. A Energia representa a total imprevisibilidade e a quebra das leis da física.</p>
+                    <p>O elemento do caos, da mudança constante, da eletricidade e da tecnologia. Representa a total imprevisibilidade e a quebra das leis físicas.</p>
                 </div>
+            </div>
+        </section>
+
+        <section class="card card-dados">
+            <h2>Terminal de Investigação: Teste de Perícia</h2>
+            <p style="color: #aaa; margin-bottom: 1.5rem;">
+                Insira o valor do seu Atributo para determinar quantos dados de 20 lados ($d20$) serão processados pelo servidor. O sistema considera apenas o **maior valor** obtido.
+            </p>
+            
+            <div class="painel-controles">
+                <div class="input-grupo">
+                    <label for="qtdDados">Dados (d20):</label>
+                    <input type="number" id="qtdDados" value="1" min="1" max="10">
+                </div>
+                <button onclick="enviarRolagem()">CONVOCAR DADOS</button>
+            </div>
+
+            <div id="resultadoCaixa" class="resultado-display">
+                <span style="color: #555; font-style: italic;">Aguardando sinal do servidor Java...</span>
             </div>
         </section>
 
     </main>
 
     <script>
-        // Altere para a URL onde sua API Java/Spring Boot está rodando
         const API_URL = "http://localhost:8080/api";
 
         async function enviarRolagem() {
@@ -69,28 +77,34 @@
 
             try {
                 const resposta = await fetch(`${API_URL}/rolar-d20?quantidade=${qtd}`);
-                const dados = await response.json();
+                const dados = await resposta.json();
 
                 if(dados.sucesso) {
-                    let html = `<div>Dados: <strong>[ ${dados.rolagens.join(', ')} ]</strong></div>`;
-                    html += `<div class="destaque">Maior Valor: <span>${dados.maiorValor}</span></div>`;
-                    
-                    if(dados.maiorValor === 20) html += `<div class="critico">CRÍTICO!</div>`;
-                    
-                    caixa.innerHTML = html;
+                    exibirResultado(dados.rolagens, dados.maiorValor, false);
                 }
             } catch (erro) {
-                // Caso o servidor Java não esteja aberto, simula localmente para não quebrar a tela
+                // Modo offline / Emergência (Gera os dados no navegador caso o Java não esteja rodando)
                 const locais = [];
                 for(let i=0; i<qtd; i++) locais.push(Math.floor(Math.random()*20)+1);
                 const maior = Math.max(...locais);
-                
-                caixa.innerHTML = `
-                    <div style="color: #ffa500; font-size: 0.8rem; margin-bottom: 5px;">(Servidor Java Offline - Modo de Emergência Local Ativo)</div>
-                    <div>Dados: [ ${locais.join(', ')} ]</div>
-                    <div class="destaque">Maior Valor: <span style="color:#ff3333">${maior}</span></div>
-                `;
+                exibirResultado(locais, maior, true);
             }
+        }
+
+        function exibirResultado(dados, maior, isOffline) {
+            const caixa = document.getElementById('resultadoCaixa');
+            
+            let html = isOffline ? `<div class="status-servidor">Modo de Emergência (Java Offline)</div>` : '';
+            html += `<div class="valores-dados">Dados Sorteados: <span>[ ${dados.join(', ')} ]</span></div>`;
+            html += `<div class="maior-valor">Maior Resultado: <strong>${maior}</strong></div>`;
+            
+            if (maior === 20) {
+                html += `<div class="efeito-critico sucesso">SUCESSO CRÍTICO! A Membrana resiste.</div>`;
+            } else if (maior === 1) {
+                html += `<div class="efeito-critico falha">FALHA CRÍTICA! O Paranormal avança.</div>`;
+            }
+
+            caixa.innerHTML = html;
         }
     </script>
 </body>

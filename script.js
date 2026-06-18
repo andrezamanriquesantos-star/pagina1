@@ -5,16 +5,16 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // Permite a comunicação com o HTML local ou GitHub Pages
+@CrossOrigin(origins = "*") 
 public class OrdemController {
 
     @GetMapping("/rolar-d20")
     public Map<String, Object> rolarD20(@RequestParam(defaultValue = "1") int quantidade) {
         Map<String, Object> resultado = new HashMap<>();
         
-        // Proteção contra valores abusivos
+        // Limites de segurança do sistema
         if (quantidade < 1) quantidade = 1;
-        if (quantidade > 10) quantidade = 10;
+        if (quantidade > 10) quantity = 10;
 
         List<Integer> rolagens = new ArrayList<>();
         Random random = new Random();
